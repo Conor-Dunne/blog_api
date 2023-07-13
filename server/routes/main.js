@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Post = require("../models/Post");
 
 
 router.get("/", (req, res) => {
@@ -11,6 +12,21 @@ router.get("/", (req, res) => {
 
     res.render("index", locals);
 })
+
+// function insertPostData () {
+//       Post.insertMany([
+//         {
+//           title: "blog",
+//           body: "Just testing things out"
+//         },
+//         {
+//             title: "test",
+//             body: "Just testing things out again"
+//           },
+//     ])
+// }
+
+// insertPostData();
 
 
 module.exports = router;
