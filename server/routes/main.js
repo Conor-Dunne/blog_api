@@ -3,14 +3,21 @@ const router = express.Router();
 const Post = require("../models/Post");
 
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
 
     const locals = {
         title: "NodeJS Blog",
         description: "A simple blog made with nodeJS"
     }
 
-    res.render("index", locals);
+    try {
+        const data =  await Post.find();
+        res.render("index", {locals, data})
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
+
 })
 
 // function insertPostData () {
