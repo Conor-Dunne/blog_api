@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 
+
+
+//Get home page with all posts
 router.get('', async (req, res) => {
     try {
       const locals = {
@@ -29,6 +32,28 @@ router.get('', async (req, res) => {
         currentRoute: '/'
       });
   
+    } catch (error) {
+      console.log(error);
+    }
+  
+  });
+
+  //Get post
+  router.get('/post/:id', async (req, res) => {
+    try {
+      let slug = req.params.id;
+  
+      const data = await Post.findById({ _id: slug });
+  
+      const locals = {
+        title: data.title,
+        description: "Simple Blog created with NodeJs, Express & MongoDb.",
+      }
+  
+      res.render('post', { 
+        locals,
+        data,
+      });
     } catch (error) {
       console.log(error);
     }

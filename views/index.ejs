@@ -9,7 +9,7 @@
     <h2 class="articles__headings">Latest posts</h2>
     <ul class="article-ul">
         <% data.forEach(post=> { %>
-            <li><a href="/posts/<%= post._id %>">
+            <li><a href="/post/<%= post._id %>">
                 <span><%= post.title %> </span>
                 <span class="article-list__date"><%= post.createdAt.toDateString()%> </span>
             </a>
