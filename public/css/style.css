@@ -41,6 +41,10 @@ textarea {
   margin-bottom: 1rem;
 }
 
+button {
+  cursor: pointer;
+}
+
 .btn {
   background-color: var(--black);
   border: none;
@@ -324,6 +328,7 @@ img {
   right: 0;
   color: var(--gray-light);
   padding: 15px;
+  cursor: pointer;
 }
 
 
