@@ -25,6 +25,32 @@ router.get('/login', async (req, res) => {
 
 });
 
+//POST check login
+router.post('login', async(req, res)=> {
+  try {
+    const {username , password} = req.body;
+
+    const user = await User.findOne( {username} );
+
+    if(!user) { 
+      return res.status(401).json({message: 'Incorrect username or password'})
+    }
+
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+
+    if(!passwordIsValid) {
+      return res.status(401).json({ message: 'Incorrect username or password' })
+    }
+
+    const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET);
+    res.cookie('token', token, { httpOnly: true });
+    res.redirect('/dashboard');
+
+  } catch (error) {
+    
+  }
+})
+
 //Post register new admin
 router.post('/register', async (req, res) => {
   try {
