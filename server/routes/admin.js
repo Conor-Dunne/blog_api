@@ -26,7 +26,7 @@ router.get('/login', async (req, res) => {
 });
 
 //POST check login
-router.post('login', async(req, res)=> {
+router.post('/login', async(req, res)=> {
   try {
     const {username , password} = req.body;
 
@@ -44,11 +44,16 @@ router.post('login', async(req, res)=> {
 
     const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET);
     res.cookie('token', token, { httpOnly: true });
-    res.redirect('/dashboard');
+    res.redirect('/admin/dashboard');
 
   } catch (error) {
     
   }
+})
+
+//GET dashbord
+router.get('/dashboard', async(req, res) => {
+  res.render('admin/dashboard')
 })
 
 //Post register new admin
