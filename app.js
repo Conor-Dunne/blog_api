@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
+
 const connectDB = require("./server/config/db")
 
 const app = express();
@@ -26,7 +27,9 @@ app.use(session({
     saveUninitialized: true,
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_URL
-    })
+    
+    }),
+    // cookie: {maxAge: newDate(Date.now() + (3600000))}
 }))
 
 app.use(express.static('public'));
