@@ -67,8 +67,8 @@ router.post("/login", async (req, res) => {
 });
 
 //GET dashbord
-// router.get("/dashboard", authMiddleware, async (req, res) => {
-router.get("/dashboard", async (req, res) => {
+
+router.get("/dashboard", authMiddleware, async (req, res) => {
   try {
     const locals = {
       title: 'Dashboard',
@@ -78,32 +78,72 @@ router.get("/dashboard", async (req, res) => {
     const data = await Post.find();
     res.render('admin/dashboard', {
       locals,
-      data
+      data,
+      layout: adminLayout
     })
 
   } catch (error) {
-    
+    console.log(error)
   }
 });
 
-//Post register new admin
-router.post("/register", async (req, res) => {
+router.get("/add-post", authMiddleware, async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(username);
-    try {
-      const user = await User.create({ username, password: hashedPassword });
-      res.status(201).json({ message: "User Created", user });
-    } catch (error) {
-      if (error.code === 11000) {
-        res.status(409).json({ message: "User already in use" });
-      }
-      res.status(500).json({ message: "Internal server error" });
+    const locals = {
+      title: 'Add post',
+      description: 'Simple Blog'
     }
+
+    const data = await Post.find();
+    res.render('admin/add-post', {
+      locals,
+      layout: adminLayout
+    })
+
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+//POST add new post
+router.post('/add-post', authMiddleware, async (req, res) => {
+  try {
+    try {
+      const newPost = new Post({
+        title: req.body.title,
+        body: req.body.body
+      });
+
+      await Post.create(newPost);
+      res.redirect('/admin/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
+
   } catch (error) {
     console.log(error);
   }
 });
+
+
+//Post register new admin
+// router.post("/register", async (req, res) => {
+//   try {
+//     const { username, password } = req.body;
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     console.log(username);
+//     try {
+//       const user = await User.create({ username, password: hashedPassword });
+//       res.status(201).json({ message: "User Created", user });
+//     } catch (error) {
+//       if (error.code === 11000) {
+//         res.status(409).json({ message: "User already in use" });
+//       }
+//       res.status(500).json({ message: "Internal server error" });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 module.exports = router;
