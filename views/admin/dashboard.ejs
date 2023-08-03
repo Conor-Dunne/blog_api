@@ -12,7 +12,7 @@
             <%= post.title %> &nearr;
             </a>
             <div class="admin-post-controls">
-                <a href="/edit-post/<%= post._id %>" class="btn">Edit</a>
+                <a href="/admin/edit-post/<%= post._id %>" class="btn">Edit</a>
                 <form action="/delete-post/<%= data._id %>?_method=DELETE" method="post"></form>
                 <input type="submit" value="Delete" class="btn">
             </div>
