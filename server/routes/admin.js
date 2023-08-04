@@ -13,7 +13,6 @@ const authMiddleware = (req, res, next) => {
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
-    
   }
 
   try {
@@ -71,60 +70,109 @@ router.post("/login", async (req, res) => {
 router.get("/dashboard", authMiddleware, async (req, res) => {
   try {
     const locals = {
-      title: 'Dashboard',
-      description: 'Simple Blog'
-    }
+      title: "Dashboard",
+      description: "Simple Blog",
+    };
 
     const data = await Post.find();
-    res.render('admin/dashboard', {
+    res.render("admin/dashboard", {
       locals,
       data,
-      layout: adminLayout
-    })
-
+      layout: adminLayout,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
 
 router.get("/add-post", authMiddleware, async (req, res) => {
   try {
     const locals = {
-      title: 'Add post',
-      description: 'Simple Blog'
-    }
+      title: "Add post",
+      description: "Simple Blog",
+    };
 
     const data = await Post.find();
-    res.render('admin/add-post', {
+    res.render("admin/add-post", {
       locals,
-      layout: adminLayout
-    })
-
-  } catch (error) {
-    console.log(error)
-  }
-});
-
-//POST add new post
-router.post('/add-post', authMiddleware, async (req, res) => {
-  try {
-    try {
-      const newPost = new Post({
-        title: req.body.title,
-        body: req.body.body
-      });
-
-      await Post.create(newPost);
-      res.redirect('/admin/dashboard');
-    } catch (error) {
-      console.log(error);
-    }
-
+      layout: adminLayout,
+    });
   } catch (error) {
     console.log(error);
   }
 });
 
+//POST add new post
+router.post("/add-post", authMiddleware, async (req, res) => {
+  try {
+    try {
+      const newPost = new Post({
+        title: req.body.title,
+        body: req.body.body,
+      });
+
+      await Post.create(newPost);
+      res.redirect("/admin/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//GET edit post
+router.get("/edit-post/:id", authMiddleware, async (req, res) => {
+  try {
+    const locals = {
+      title: "Edit post",
+      description: "Simple Blog",
+    };
+
+    const data = await Post.findById(req.params.id);
+    res.render("admin/edit-post", {
+      locals,
+      data,
+      layout: adminLayout,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//PUT edit post
+router.put("/edit-post/:id", authMiddleware, async (req, res) => {
+  try {
+    await Post.findByIdAndUpdate(req.params.id, {
+      title: req.body.title,
+      bosy: req.body.body,
+      updatedAt: Date.now(),
+    });
+
+    res.redirect(`/admin/dashboard`);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete("/delete-post/:id", authMiddleware, async (req, res) => {
+  try {
+    await Post.deleteOne({ _id: req.params.id });
+    res.redirect("/admin/dashboard");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.redirect('/')
+})
+
+
+
+module.exports = router;
 
 //Post register new admin
 // router.post("/register", async (req, res) => {
@@ -145,5 +193,3 @@ router.post('/add-post', authMiddleware, async (req, res) => {
 //     console.log(error);
 //   }
 // });
-
-module.exports = router;
