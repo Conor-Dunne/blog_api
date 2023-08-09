@@ -30,7 +30,7 @@ router.get('', async (req, res) => {
         data,
         current: page,
         nextPage: hasNextPage ? nextPage : null,
-        currentRoute: '/'
+        currentRoute: '/',
       });
   
     } catch (error) {
@@ -54,6 +54,7 @@ router.get('', async (req, res) => {
       res.render('post', { 
         locals,
         data,
+        currentRoute: req.route,
       });
     } catch (error) {
       console.log(error);
